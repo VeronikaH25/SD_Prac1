@@ -23,8 +23,8 @@ def main():
 
         start = time.time()  
 
-        msg = json.loads(raw)
-        text = msg.get("text", "")
+        msg = json.loads(raw) # decodifica el mensaje JSON
+        text = msg.get("text", "") # Obtiene el texto da filtrar
 
         # Filtra el texto
         filtered = filter_server.submit_text(text)
@@ -37,7 +37,7 @@ def main():
 
         # Guarda el tiempo
         R.rpush("metrics:times", processing_time)
-        # Mantiene los últimos 100 tiempos para estadísticas
+        # Mantiene los últimos 100 tiempos para estadísticas 
         R.ltrim("metrics:times", -100, -1)
 
         # print(f"[Worker] Processat: {filtered}")

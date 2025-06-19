@@ -21,9 +21,9 @@ def contar_mensajes():
         return 0
 
 def lanzar_worker():
-    proceso = subprocess.Popen(["python", "worker.py"]) 
+    proceso = subprocess.Popen(["python", "worker.py"])  # Ejecuta el worker.py
     workers.append(proceso)
-    r.set("workers:active", len(workers)) #para el data_capturer.py
+    r.set("workers:active", len(workers)) # Recalcula el conteo de workers activos
     print(f"Worker lanzado")
 
 def terminar_worker():
@@ -44,7 +44,7 @@ def main():
             mensajes = contar_mensajes()
             print(f"Mensajes en cola: {mensajes} | Workers activos: {len(workers)}")
 
-            if segundos % INTERVAL_ESCALAT == 0:
+            if segundos % INTERVAL_ESCALAT == 0: # cada 3 segundos
                 if mensajes > UMBRAL_SUBIDA and len(workers) < MAX_WORKERS:
                     lanzar_worker()
                 elif mensajes <= UMBRAL_BAJADA and len(workers) > MIN_WORKERS:

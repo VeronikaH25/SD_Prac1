@@ -4,18 +4,18 @@ import itertools
 import Pyro4
 import sys
 
-def discover_filter_names(prefix="insult_filter_pyro"): #devuelve una lista de nombres de filtros 
+def discover_filter_names(prefix="insult_filter_pyro"): #devuelve una lista de nombres de filters 
     ns = Pyro4.locateNS()
     all_names = ns.list().keys() # filtrar por prefijo "insult_filter_pyro"
     names = [n for n in all_names if n.startswith(prefix)]
     return sorted(names)
 
-def send_filter_requests(filter_names, num_requests):
-    ns = Pyro4.locateNS()
-    proxies = [Pyro4.Proxy(ns.lookup(name)) for name in filter_names]
-    rr = itertools.cycle(proxies)
+def send_filter_requests(filter_names, num_requests): #reparte peticiones a los filters
+    ns = Pyro4.locateNS() #conectar al Name Server de Pyro
+    proxies = [Pyro4.Proxy(ns.lookup(name)) for name in filter_names] # Crear proxies para cada filtro
+    rr = itertools.cycle(proxies) #round-robin para distribuir peticiones
     for _ in range(int(num_requests)):
-        next(rr).submit_text("This is a stupid example to test performance.")
+        next(rr).submit_text("This is an example to test performance.")
 
 def pyro_filter_test_single_node(num_requests, filter_name):
     start = time.time()
@@ -38,7 +38,7 @@ def pyro_filter_test_multiple_nodes(num_requests, filter_names):
         p.start()
         procs.append(p)
 
-    for p in procs:
+    for p in procs: # espera a que terminen
         p.join()
 
     elapsed = time.time() - start

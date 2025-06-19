@@ -13,14 +13,9 @@ class InsultFilter:
         self._name = name
         self.results = []
         if os.path.exists(self.JSON_FILE):  # carga insultos del archivo JSON
-            try:
-                with open(self.JSON_FILE, "r") as f:
-                    data = json.load(f)
-                self.insults = set(data.get("insults", []))
-                print(f"[{self._name}] Loaded insults from JSON: {self.insults}")
-            except json.JSONDecodeError:
-                print(f"[{self._name}] Error decoding {self.JSON_FILE}")
-                self.insults = set()
+            with open(self.JSON_FILE, "r") as f:
+                data = json.load(f)
+            self.insults = set(data.get("insults", []))
         else:
             print(f"[{self._name}] No {self.JSON_FILE} found")
             self.insults = set()
@@ -47,14 +42,13 @@ class InsultFilter:
             return list(self.results)
 
 def run_filter(host, port, name):
-    daemon = Pyro4.Daemon(host=host, port=port)
+    daemon = Pyro4.Daemon(host=host, port=port) # crea el daemon 
     uri = daemon.register(InsultFilter(name))  #  pasamos el name 
-    #uri = daemon.register(InsultFilter(name), name)  #nou
 
     ns = Pyro4.locateNS()
     ns.register(name, uri)
     print(f"[Server] {name} running at {uri}")
-    daemon.requestLoop()
+    daemon.requestLoop() # Espera a que lleguen peticiones
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()

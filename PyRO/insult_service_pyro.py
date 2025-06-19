@@ -63,8 +63,10 @@ class InsultService:
 def run_service(host, port, name):
     InsultService._name = name
     service = InsultService()
+
     daemon = Pyro4.Daemon(host=host, port=port)
     uri = daemon.register(service)
+    
     ns = Pyro4.locateNS()
     ns.register(name, uri)
     print(f"[Server] {name} running at {uri}")

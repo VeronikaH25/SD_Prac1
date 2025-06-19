@@ -1,12 +1,12 @@
 import subprocess
 import sys
 
-def spawn_filters(num_instances=5, base_port=9094, script="insult_filter_pyro.py"):
+def spawn_filters(num_instances=5, base_port=9094, script="insult_filter_pyro.py"): #defecto 5 instancias
     procs = []
     for i in range(num_instances):
         port = base_port + i #puerto
         name = f"insult_filter_pyro{i}"
-        p = subprocess.Popen([ #lanza el script
+        p = subprocess.Popen([ # insult_filter_pyro.py --port 9094 --name insult_filter_pyro0
             sys.executable, script,
             "--port", str(port),
             "--name", name
@@ -16,7 +16,7 @@ def spawn_filters(num_instances=5, base_port=9094, script="insult_filter_pyro.py
     return procs
 
 if __name__ == "__main__":
-    n = int(sys.argv[1]) if len(sys.argv)>1 else 3 #Defrcto 3
+    n = int(sys.argv[1]) if len(sys.argv)>1 else 3 # Defecto 3
     procs = spawn_filters(num_instances=n)
     print(f"Total: {len(procs)} filter instances running.")
     for p in procs:

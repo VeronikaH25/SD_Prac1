@@ -2,11 +2,10 @@ import xmlrpc.client, time, multiprocessing, sys
 
 def send_requests(host, num_requests):
     proxy = xmlrpc.client.ServerProxy(f"http://{host}")
-    start = time.time()
     for i in range(num_requests):
-        proxy.add_insult(f"xml_ins_{i}_{time.time()}")
-        if (i + 1) % 10 == 0:
-            print(f"[{host}] Sent {i+1} at {time.time() - start:.2f}s")
+        proxy.add_insult(f"ins_{i}_{time.time()}") # envia insultos únicos
+        if (i + 1) % 10 == 0: #cada 10 peticiones printamos el tiempo transcurrido
+            print(f"[{host}] Sent {i+1} at {time.time()}s")
 
 def generate_hosts(base_port, count):
     return [f"localhost:{base_port + i}" for i in range(count)]

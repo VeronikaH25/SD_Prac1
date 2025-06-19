@@ -41,7 +41,7 @@ class InsultService:
                 if not self.insults or not self.subscribers: #No hay insultos o subscribers
                     continue
                 insult = random.choice(list(self.insults))
-                for sub in self.subscribers:
+                for sub in self.subscribers: #sub es una url de un subscriber
                     try: #Crea un proxi para que apunte a la url del subscriber y lo llama
                         xmlrpc.client.ServerProxy(sub).receive_insult(insult)
                     except:

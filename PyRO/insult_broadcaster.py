@@ -17,8 +17,8 @@ TEXTS = [ #ejemplos de textos
 def push_text(r, silent=False):
     text = random.choice(TEXTS)
     try:
-        r.rpush("texts", json.dumps({"text": text}))
-        r.incr("metrics:arrived")
+        r.rpush("texts", json.dumps({"text": text})) # Enviar texto a la cola "texts"
+        r.incr("metrics:arrived") # Incrementar contador de textos recibidos
         if not silent:
             print(f"[Broadcaster] Enviado texto: {text}")
     except Exception as e:
